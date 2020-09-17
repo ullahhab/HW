@@ -23,6 +23,7 @@ list_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		arr append_1_arg;
 		int query_1_arg;
 		int remove_1_arg;
+		array sort_1_arg;
 	} argument;
 	char *result;
 	xdrproc_t _xdr_argument, _xdr_result;
@@ -49,6 +50,12 @@ list_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		_xdr_argument = (xdrproc_t) xdr_int;
 		_xdr_result = (xdrproc_t) xdr_void;
 		local = (char *(*)(char *, struct svc_req *)) remove_1_svc;
+		break;
+
+	case sort:
+		_xdr_argument = (xdrproc_t) xdr_array;
+		_xdr_result = (xdrproc_t) xdr_void;
+		local = (char *(*)(char *, struct svc_req *)) sort_1_svc;
 		break;
 
 	default:

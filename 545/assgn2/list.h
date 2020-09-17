@@ -16,6 +16,8 @@ extern "C" {
 
 typedef int arr[10];
 
+typedef int list[100];
+
 #define LIST_PROG 0x32134567
 #define LIST_VERS 1
 
@@ -29,6 +31,9 @@ extern  void * query_1_svc(int *, struct svc_req *);
 #define remove 3
 extern  void * remove_1(int *, CLIENT *);
 extern  void * remove_1_svc(int *, struct svc_req *);
+#define sort 4
+extern  void * sort_1(array *, CLIENT *);
+extern  void * sort_1_svc(array *, struct svc_req *);
 extern int list_prog_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
 
 #else /* K&R C */
@@ -41,6 +46,9 @@ extern  void * query_1_svc();
 #define remove 3
 extern  void * remove_1();
 extern  void * remove_1_svc();
+#define sort 4
+extern  void * sort_1();
+extern  void * sort_1_svc();
 extern int list_prog_1_freeresult ();
 #endif /* K&R C */
 
@@ -48,9 +56,11 @@ extern int list_prog_1_freeresult ();
 
 #if defined(__STDC__) || defined(__cplusplus)
 extern  bool_t xdr_arr (XDR *, arr);
+extern  bool_t xdr_list (XDR *, list);
 
 #else /* K&R C */
 extern bool_t xdr_arr ();
+extern bool_t xdr_list ();
 
 #endif /* K&R C */
 

@@ -41,3 +41,15 @@ remove_1_svc(int *argp, struct svc_req *rqstp)
 
 	return (void *) &result;
 }
+
+void *
+sort_1_svc(array *argp, struct svc_req *rqstp)
+{
+	static char * result;
+
+	/*
+	 * insert server code here
+	 */
+
+	return (void *) &result;
+}

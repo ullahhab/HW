@@ -15,3 +15,14 @@ xdr_arr (XDR *xdrs, arr objp)
 		 return FALSE;
 	return TRUE;
 }
+
+bool_t
+xdr_list (XDR *xdrs, list objp)
+{
+	register int32_t *buf;
+
+	 if (!xdr_vector (xdrs, (char *)objp, 100,
+		sizeof (int), (xdrproc_t) xdr_int))
+		 return FALSE;
+	return TRUE;
+}

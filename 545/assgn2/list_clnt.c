@@ -53,3 +53,18 @@ remove_1(int *argp, CLIENT *clnt)
 	}
 	return ((void *)&clnt_res);
 }
+
+void *
+sort_1(array *argp, CLIENT *clnt)
+{
+	static char clnt_res;
+
+	memset((char *)&clnt_res, 0, sizeof(clnt_res));
+	if (clnt_call (clnt, sort,
+		(xdrproc_t) xdr_array, (caddr_t) argp,
+		(xdrproc_t) xdr_void, (caddr_t) &clnt_res,
+		TIMEOUT) != RPC_SUCCESS) {
+		return (NULL);
+	}
+	return ((void *)&clnt_res);
+}

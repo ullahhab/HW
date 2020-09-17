@@ -17,6 +17,8 @@ list_prog_1(char *host)
 	int  query_1_arg;
 	void  *result_3;
 	int  remove_1_arg;
+	void  *result_4;
+	array  sort_1_arg;
 
 #ifndef	DEBUG
 	clnt = clnt_create (host, LIST_PROG, LIST_VERS, "udp");
@@ -36,6 +38,10 @@ list_prog_1(char *host)
 	}
 	result_3 = remove_1(&remove_1_arg, clnt);
 	if (result_3 == (void *) NULL) {
+		clnt_perror (clnt, "call failed");
+	}
+	result_4 = sort_1(&sort_1_arg, clnt);
+	if (result_4 == (void *) NULL) {
 		clnt_perror (clnt, "call failed");
 	}
 #ifndef	DEBUG
