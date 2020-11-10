@@ -60,17 +60,18 @@ public class DataServer {
 				BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 				OutputStream output = primSocket.getOutputStream();
 				PrintWriter writer = new PrintWriter(output,true);
-				writer.println("JOIN:"+Integer.parseInt(args[1]));
+				writer.println("JOIN:"+Integer.parseInt(args[0]));
 				System.out.println("Just send out: JOIN:"+Integer.parseInt(args[1])+" to port: "+Integer.parseInt(args[1]));
 				while(reader.readLine().equals("JOIN_COMPLETE")) {
-					System.out.println("DEBUG3 Response got "+reader.readLine());
+					System.out.println("got Response "+reader.readLine());
 					continue;
 				}
 				System.out.println("DEBUG 4 JOINED SUCCESS");
 				ID = Identity.backup;
+				//new BackupThread(primSocket, server, ID).start();
 				while(true) {
 					Socket socket = serverSocket.accept();
-					new ServerThread(socket, server, ID,primSocket).start();
+					new ServerThread(socket, server, ID).start();
 				}
 		}
 			catch (IOException e) {

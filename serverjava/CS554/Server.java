@@ -8,7 +8,7 @@ public class Server {
 	//socket connection array count
 	int count=0;
 	//socket array[]
-	Socket[] socArray = new Socket[100000];
+	int[] socArray = new int[100000];
 	boolean is_primary;
 	int port;
 	int primPort;
@@ -61,14 +61,18 @@ public class Server {
 			PrintWriter writer = new PrintWriter(output, true);
 			for(int i=0;i<this.count; i++) {
 				//TODO: Request for update should not be send to the backup server requesting.
-				Socket soc = this.socArray[i];
+				Socket soc = new Socket("localhost",this.socArray[i]);
 				OutputStream output1 = soc.getOutputStream();
 				PrintWriter writer1 = new PrintWriter(output1,true);
+				System.out.println("Debug10 Sending to: "+soc+" "+socArray[i]+" "+i);
 				InputStream input1 = soc.getInputStream();
 				BufferedReader reader = new BufferedReader(new InputStreamReader(input1)); 
-				while(reader.readLine().equals("COMPLETE_UPDATE")) {
-					writer1.println("UPDATE:"+write);
+				writer1.println("UPDATE:"+write);
+				while(!reader.readLine().equals("COMPLETE_UPDATE")) {					
+					System.out.println("DEBUG9 GOT RESPONSE");
+					continue;
 				}
+				soc.close();
 				
 			}
 			writer.println("COMPLETE_WRITE");
@@ -79,8 +83,8 @@ public class Server {
 	}
 	//Joins the backup server 
 	//TODO: Save the socket information in the array of socket instead of .[DONE]
-	public void Join(Socket socket) {
-		saveSocket(socket);
+	public void Join(int value,Socket socket) {
+		saveSocket(value);
 		try{
 			OutputStream output = socket.getOutputStream();
 			PrintWriter writer = new PrintWriter(output,true);
@@ -94,9 +98,10 @@ public class Server {
 		
 	}
 	//updates the values
-	public void Update(Socket socket,String msg) {
+	public void Update(int port, String msg) {
 		//sent the message to the requesting server
 		try {
+			Socket socket = new Socket("localhost",port);
 			OutputStream output = socket.getOutputStream();
 			PrintWriter writer = new PrintWriter(output, true);
 			writer.println(msg);
@@ -106,16 +111,16 @@ public class Server {
 		}
 	}
 	//This method and remove socket are only used by primary server
-	public void saveSocket(Socket socket) {
+	public void saveSocket(int socket) {
 		System.out.println("DEBUG "+socket);
 		this.socArray[count] = socket;
 		System.out.println("DEBUG2 "+socArray[count]); 
 		count+=1;
 	}
 	//removes socket that has just quit and shift all the value back to the normal
-	public void removeSocket(Socket socket) {
+	public void removeSocket(int socket) {
 		for(int i=0; i<count;i++) {
-			if(socArray[i].equals(socket)) {
+			if(socArray[i]==socket) {
 				shiftArray(i);
 				
 			}
@@ -130,6 +135,10 @@ public class Server {
 				socArray[i]=socArray[i+1];
 			}
 		}
+	}
+
+	public void UpdateRead(int value){
+		read = value;
 	}
 	
 	
